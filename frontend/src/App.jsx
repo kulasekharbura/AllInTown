@@ -1,0 +1,124 @@
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Outlet,
+} from "react-router-dom";
+import React, { useContext } from "react";
+import FormSelect from "./components/Location/form";
+import HomePage from "./components/mainpage/HomePage";
+import CategoriesPage from "./components/mainpage/CategoriesPage";
+import Navbar from "./components/mainpage/Navbar";
+import { LocationProvider } from "./context/LocationContext";
+import { AuthProvider } from "./context/AuthContext";
+import ShopDetailsWrapper from "./components/mainpage/ShopDetailsWrapper";
+import CartPage from "./components/cart/CartPage";
+import LoginPage from "./components/auth/LoginPage";
+import RegisterPage from "./components/auth/RegisterPage";
+import NotFound from "./components/mainpage/NotFound";
+import SellerDashboard from "./components/seller/SellerDashboard";
+import ManageItemsPage from "./components/seller/ManageItemsPage";
+import SellerRoute from "./components/auth/SellerRoute";
+import PrivateRoute from "./components/auth/PrivateRoute";
+import ProfilePage from "./components/profile/ProfilePage";
+import SellerOrdersPage from "./components/seller/SellerOrdersPage";
+import CheckoutPage from "./components/checkout/CheckoutPage";
+import OrderSuccessPage from "./components/checkout/OrderSuccessPage";
+import SellerOrderDetailsPage from "./components/seller/SellerOrderDetailsPage";
+import DeliveryDashboard from "./components/delivery/DeliveryDashboard";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import AuthContext from "./context/AuthContext";
+
+// New middleware for delivery boy routes
+function DeliveryRoute() {
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!user || user.role !== "delivery_boy") {
+    return (
+      <Box sx={{ textAlign: "center", mt: 4 }}>
+        <Typography variant="h5" color="error">
+          Access Denied
+        </Typography>
+        <Typography>You do not have permission to view this page.</Typography>
+      </Box>
+    );
+  }
+
+  return <Outlet />;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <LocationProvider>
+          <MainLayout />
+        </LocationProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+// This wrapper decides whether to show Navbar
+function MainLayout() {
+  const location = useLocation();
+
+  const hideNavbar = location.pathname === "/";
+
+  return (
+    <>
+      {!hideNavbar && <Navbar />}
+      <Routes>
+        <Route path="/" element={<FormSelect />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/shop/:id" element={<ShopDetailsWrapper />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* Seller Routes */}
+        <Route element={<SellerRoute />}>
+          <Route path="/seller/dashboard" element={<SellerDashboard />} />
+          <Route
+            path="/seller/shop/:shopId/items"
+            element={<ManageItemsPage />}
+          />
+          <Route path="/seller/orders" element={<SellerOrdersPage />} />
+          {/* 2. Add the route for a single order's details */}
+          <Route
+            path="/seller/orders/:orderId"
+            element={<SellerOrderDetailsPage />}
+          />
+        </Route>
+
+        {/* Delivery Boy Routes */}
+        <Route element={<DeliveryRoute />}>
+          <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
+        </Route>
+
+        {/* Private User Routes */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route
+            path="/order-success/:orderCode"
+            element={<OrderSuccessPage />}
+          />
+        </Route>
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
