@@ -43,6 +43,8 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
 
+//proxy new
+app.set("trust proxy", 1);
 // session middleware (must be applied before routes)
 app.use(
   session({
