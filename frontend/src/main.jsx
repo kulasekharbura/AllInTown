@@ -11,7 +11,7 @@ import App from "./App.jsx";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL =
-  import.meta.env.VITE_API_URL || "http://localhost:8080";
+  import.meta.env.VITE_API_URL || "https://allintown.onrender.com";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
