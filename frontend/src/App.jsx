@@ -75,7 +75,7 @@ function MainLayout() {
 
   return (
     <>
-      {<Navbar />}
+      {/*!hideNavbar &&*/ <Navbar />}
       <Routes>
         <Route path="/" element={<FormSelect />} />
         <Route path="/home" element={<HomePage />} />

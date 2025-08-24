@@ -21,7 +21,7 @@ if (!SESSION_SECRET) {
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://all-in-town.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -1065,12 +1065,10 @@ app.put(
 
       // Delivery boy can only mark an order as 'delivered'
       if (status !== "delivered") {
-        return res
-          .status(400)
-          .json({
-            error:
-              "Invalid status update. Delivery boys can only mark orders as 'delivered'.",
-          });
+        return res.status(400).json({
+          error:
+            "Invalid status update. Delivery boys can only mark orders as 'delivered'.",
+        });
       }
 
       const order = await Order.findById(orderId);
@@ -1087,11 +1085,9 @@ app.put(
 
       // Only allow updating from 'shipped' to 'delivered'
       if (order.status !== "shipped") {
-        return res
-          .status(400)
-          .json({
-            error: "Order must be 'shipped' to be marked as 'delivered'.",
-          });
+        return res.status(400).json({
+          error: "Order must be 'shipped' to be marked as 'delivered'.",
+        });
       }
 
       order.status = status;
