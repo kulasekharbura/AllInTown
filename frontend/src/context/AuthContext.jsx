@@ -13,7 +13,7 @@ const AuthContext = createContext({
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL =
-  import.meta.env.VITE_API_URL || "http://localhost:8080";
+  import.meta.env.VITE_API_URL || "https://allintown.onrender.com";
 
 function readLocalCart() {
   try {

@@ -54,7 +54,7 @@ export default function CategoriesPage() {
     setError(null);
 
     axios
-      .get("http://localhost:8080/home", {
+      .get("https://allintown.onrender.com/home", {
         params: { location: effectiveLocation },
       })
       .then((res) => {
