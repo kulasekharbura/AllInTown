@@ -1,4 +1,4 @@
-// server.js (replace your existing file contents with this)
+// server.js 
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
@@ -36,7 +36,7 @@ const Item = require("./models/Items");
 const Shop = require("./models/Shops");
 //------------------------------------------------//
 
-// ---------- Passport + session setup (STEP 1) ----------
+// ---------- Passport + session setup ----------
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
@@ -45,7 +45,7 @@ const bcrypt = require("bcrypt");
 
 //proxy new
 app.set("trust proxy", 1);
-// session middleware (must be applied before routes)
+// session middleware
 app.use(
   session({
     name: "allintown.sid",
@@ -58,7 +58,6 @@ app.use(
     }),
     cookie: {
       httpOnly: true,
-      // set secure true in production (when using HTTPS)
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
@@ -66,7 +65,6 @@ app.use(
   })
 );
 
-// initialize passport after session middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -129,7 +127,6 @@ app.get("/api/locations", async (req, res) => {
   }
 });
 //------------------------------------------------//
-// Example routes (home & shops) — unchanged from your code
 app.get("/home", async (req, res) => {
   try {
     const loc = req.query.location;
