@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 
-// basic env checks / defaults
 const mongoURI = process.env.MONGO_URI;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const PORT = process.env.PORT || 8080;
